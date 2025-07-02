@@ -5,8 +5,9 @@
         }
     ],
     "settings": {
-        "python.defaultInterpreterPath": "/Users/yuliav/miniconda3/envs/scheduling-agent/bin/python",
-        "python.terminal.activateEnvironment": true
+        "python.terminal.activateEnvironment": true,
+        "python.condaPath": "conda",
+        "python.venvPath": "~/miniconda3/envs"
     },
     "extensions": {
         "recommendations": [
