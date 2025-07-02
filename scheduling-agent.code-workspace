@@ -1,0 +1,21 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "/Users/yuliav/miniconda3/envs/scheduling-agent/bin/python",
+        "python.terminal.activateEnvironment": true
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.black-formatter",
+            "ms-python.flake8",
+            "ms-python.mypy-type-checker",
+            "bradlc.vscode-tailwindcss",
+            "ms-toolsai.jupyter"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "python.defaultInterpreterPath": "/Users/yuliav/miniconda3/envs/scheduling-agent/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.venvPath": "/Users/yuliav/miniconda3/envs",
+    "python.condaPath": "/Users/yuliav/miniconda3/bin/conda",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "files.associations": {
+        "*.py": "python"
+    },
+    "terminal.integrated.defaultLocation": "panel",
+    "workbench.panel.defaultLocation": "bottom",
+    "terminal.integrated.env.osx": {
+        "CONDA_DEFAULT_ENV": "scheduling-agent"
+    }
+}
