@@ -1,0 +1,11 @@
+streamlit
+pydantic-ai
+prefect
+python-dotenv
+requests
+pandas
+pytest
+black
+flake8
+mypy
+msal
