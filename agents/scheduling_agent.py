@@ -5,7 +5,6 @@ from pydantic_ai import Agent
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime
-import os
 
 class MeetingRequest(BaseModel):
     """Model for meeting requests"""
@@ -39,9 +38,21 @@ class SchedulingAgent:
             system_prompt="""You are an intelligent scheduling assistant.
             Your job is to help users schedule meetings by:
             1. Extracting meeting details from natural language requests
-            2. Suggesting optimal time slots based on availability
-            3. Identifying potential conflicts
-            4. Providing clear, actionable scheduling recommendations
+            2. Analyzing calendar availability for the EXACT date/time requested
+            3. Carefully checking for conflicts with existing calendar events
+            4. Only suggesting time slots that are actually available (no overlaps)
+            5. If no slots are available on the requested date, mark success=False and list specific conflicts
+
+            IMPORTANT RULES FOR CONFLICT DETECTION:
+            - A meeting conflicts ONLY if it overlaps with existing events
+            - Example: If existing event is 09:00-09:30, then 10:00-11:00 is FREE (no overlap)
+            - Example: If existing event is 14:00-15:30, then 15:00-16:00 CONFLICTS (overlaps)
+            - Check exact times carefully - adjacent events don't conflict
+            - If user requests "tomorrow", use the next day's calendar data
+            - If user requests "today", use today's calendar data
+            - Be precise about availability - don't suggest alternative dates unless specifically asked
+            - Mark success=False only if there's a REAL conflict (time overlap)
+            - List specific conflicts with exact times when conflicts exist
 
             Always be helpful, professional, and efficient in your responses."""
         )
@@ -58,7 +69,7 @@ class SchedulingAgent:
             """
 
             result = await self.agent.run(context)
-            return result.data
+            return result.output
         except Exception as e:
             # Return error result
             return SchedulingResult(
@@ -83,7 +94,7 @@ class SchedulingAgent:
             """
 
             result = self.agent.run_sync(context)
-            return result.data
+            return result.output
         except Exception as e:
             return SchedulingResult(
                 success=False,

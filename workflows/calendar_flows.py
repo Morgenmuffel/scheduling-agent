@@ -1,23 +1,19 @@
 """
-Prefect workflows for calendar operations
+Synchronous workflows for calendar operations
 """
 
-from prefect import task, flow
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
-import asyncio
 
 from integrations.graph_client import GraphClient
 from agents.scheduling_agent import SchedulingAgent
 
-@task
 def authenticate_user(client_id: str, client_secret: str, tenant_id: str) -> Optional[str]:
     """Authenticate user and return access token"""
     # This would integrate with the auth manager
     # For now, return placeholder
     return "placeholder_token"
 
-@task
 def fetch_calendar_events(access_token: str, start_date: datetime, end_date: datetime) -> List[Dict[str, Any]]:
     """Fetch calendar events from Microsoft Graph"""
     try:
@@ -28,7 +24,6 @@ def fetch_calendar_events(access_token: str, start_date: datetime, end_date: dat
         print(f"Error fetching calendar events: {str(e)}")
         return []
 
-@task
 def find_available_slots(access_token: str, attendee_emails: List[str],
                         duration_minutes: int) -> List[Dict[str, Any]]:
     """Find available time slots for meeting"""
@@ -40,14 +35,13 @@ def find_available_slots(access_token: str, attendee_emails: List[str],
         print(f"Error finding available slots: {str(e)}")
         return []
 
-@task
 def process_ai_scheduling_request(user_request: str, calendar_data: Dict[str, Any]) -> Dict[str, Any]:
     """Process scheduling request using AI"""
     try:
         agent = SchedulingAgent()
         result = agent.process_request_sync(user_request, calendar_data)
 
-        # Convert Pydantic model to dict for Prefect serialization
+        # Convert Pydantic model to dict for serialization
         return {
             'success': result.success,
             'suggested_slots': [slot.model_dump() for slot in result.suggested_slots],
@@ -63,7 +57,6 @@ def process_ai_scheduling_request(user_request: str, calendar_data: Dict[str, An
             'conflicts': [f"AI processing error: {str(e)}"]
         }
 
-@task
 def create_calendar_meeting(access_token: str, meeting_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Create a new calendar meeting"""
     try:
@@ -74,8 +67,7 @@ def create_calendar_meeting(access_token: str, meeting_data: Dict[str, Any]) -> 
         print(f"Error creating meeting: {str(e)}")
         return None
 
-@flow(name="Smart Scheduling Flow")
-def smart_scheduling_flow(
+def smart_scheduling_workflow(
     user_request: str,
     access_token: str,
     start_date: Optional[datetime] = None,
@@ -116,8 +108,7 @@ def smart_scheduling_flow(
         'processing_time': datetime.now().isoformat()
     }
 
-@flow(name="Create Meeting Flow")
-def create_meeting_flow(
+def create_meeting_workflow(
     access_token: str,
     meeting_details: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -142,8 +133,7 @@ def create_meeting_flow(
             'created_at': datetime.now().isoformat()
         }
 
-@flow(name="Find Available Times Flow")
-def find_available_times_flow(
+def find_available_times_workflow(
     access_token: str,
     attendee_emails: List[str],
     duration_minutes: int,

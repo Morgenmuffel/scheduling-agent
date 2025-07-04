@@ -1,10 +1,10 @@
 streamlit
 pydantic-ai
-prefect
 python-dotenv
 requests
 pandas
 pytest
+pytest-asyncio
 black
 flake8
 mypy

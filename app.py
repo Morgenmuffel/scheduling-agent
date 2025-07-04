@@ -13,6 +13,16 @@ import pandas as pd
 from agents.scheduling_agent import SchedulingAgent
 from utils.auth import AuthManager
 from integrations.graph_client import GraphClient
+from dotenv import load_dotenv
+
+# Load all environment variables from .env
+load_dotenv()
+
+# Verify critical variables are loaded
+required_vars = ['GROQ_API_KEY', 'AZURE_CLIENT_ID', 'AZURE_TENANT_ID']
+missing_vars = [var for var in required_vars if not os.getenv(var)]
+if missing_vars:
+    st.error(f"Missing environment variables: {missing_vars}")
 
 # Page configuration
 st.set_page_config(
